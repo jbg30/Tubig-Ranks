@@ -44,6 +44,8 @@ export const reportResult = async (req, res) => {
     if (firstReport.winningTeam !== secondReport.winningTeam) {
       match.status = 'disputed';
       await match.save();
+      const playerIds = match.players.map((p) => p.userId._id);
+      await User.updateMany({ _id: { $in: playerIds } }, { status: 'idle' });
       return res.status(200).json({ status: 'disputed' });
     }
 
