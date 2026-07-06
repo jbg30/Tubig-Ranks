@@ -1,0 +1,13 @@
+/* Global responsive styles */
+
+@media (max-width: 768px) {
+  /* Match page */
+  .match-teams-row {
+    flex-direction: column !important;
+  }
+
+  /* Shared: tighten horizontal padding on small screens */
+  body {
+    overflow-x: hidden;
+  }
+}
