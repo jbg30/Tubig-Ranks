@@ -88,6 +88,7 @@ export default function Match() {
       if (!res.ok) { alert(data.error); return; }
       setReportedTeam(winningTeam);
       if (data.status === 'completed') { setMatch((m) => ({ ...m, status: 'completed', winningTeam: data.winningTeam })); }
+      else if (data.status === 'disputed') { setMatch((m) => ({ ...m, status: 'disputed' })); }
     } catch { alert('Could not reach the server'); }
   };
 
@@ -109,6 +110,7 @@ export default function Match() {
   const teamB = match.players.filter((p) => p.team === 'B');
   const myTeam = match.players.find((p) => p.userId._id === user._id)?.team;
   const completed = match.status === 'completed';
+  const disputed = match.status === 'disputed';
   const won = completed && match.winningTeam === myTeam;
 
   const renderTeam = (players, label) => (
@@ -148,13 +150,44 @@ export default function Match() {
           {/* Header */}
           <div style={{ textAlign: 'center' }}>
             <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 38, letterSpacing: 4, margin: '0 0 4px' }}>
-              {abandoned ? 'Match Abandoned' : completed ? (won ? 'Victory' : 'Defeat') : 'Match Found'}
+              {abandoned ? 'Match Abandoned' : disputed ? 'Result Disputed' : completed ? (won ? 'Victory' : 'Defeat') : 'Match Found'}
             </h1>
             <div style={{ fontSize: 13, color: '#4e7a9b', textTransform: 'uppercase', letterSpacing: 2 }}>
               {match.mode}
               {completed && !abandoned && <span style={{ marginLeft: 8, color: won ? '#3dcf8e' : '#f87171' }}>Â· {won ? 'You Won' : 'You Lost'}</span>}
             </div>
           </div>
+
+          {/* Disputed banner */}
+          {disputed && (
+            <div style={{
+              background: '#1a1200',
+              border: '1px solid #8a6500',
+              borderLeft: '4px solid #f0a500',
+              borderRadius: 12,
+              padding: '20px 24px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 12,
+              animation: 'fadeSlideDown 0.4s ease both',
+            }}>
+              <div style={{ fontSize: 28, fontFamily: "'Bebas Neue', sans-serif", letterSpacing: 3, color: '#f0a500' }}>
+                Result Disputed
+              </div>
+              <div style={{ fontSize: 13, color: '#a08040', textAlign: 'center' }}>
+                Players reported different results. An admin will review and resolve this match.
+              </div>
+              <button
+                onClick={() => navigate('/lobby')}
+                style={{ marginTop: 4, background: 'transparent', border: '1px solid #8a6500', borderRadius: 8, color: '#f0a500', fontSize: 13, fontWeight: 700, padding: '10px 28px', cursor: 'pointer', letterSpacing: 1, transition: 'background 0.15s' }}
+                onMouseEnter={(e) => e.currentTarget.style.background = '#2a1e00'}
+                onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+              >
+                Return to Lobby
+              </button>
+            </div>
+          )}
 
           {/* Abandoned banner */}
           {abandoned && (
@@ -195,7 +228,7 @@ export default function Match() {
           </div>
 
           {/* Report result */}
-          {!completed && !abandoned && (
+          {!completed && !abandoned && !disputed && (
             <div style={{ background: '#0f2236', border: '1px solid #1e4976', borderRadius: 14, padding: '20px 24px', textAlign: 'center' }}>
               <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: '#4e7a9b', marginBottom: 16 }}>
                 {reportedTeam ? `Waiting for confirmation... (you reported Team ${reportedTeam})` : 'Report Result'}
@@ -238,7 +271,7 @@ export default function Match() {
 
           {/* Actions */}
           <div style={{ display: 'flex', gap: 10, justifyContent: 'center' }}>
-            {!completed && !abandoned && (
+            {!completed && !abandoned && !disputed && (
               <button
                 onClick={handleBackToLobby}
                 style={dangerBtn}
