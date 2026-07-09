@@ -1,4 +1,4 @@
-﻿import API from '../api.js';
+﻿import API, { authFetch } from '../api.js';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
@@ -40,8 +40,8 @@ export default function Tournament() {
   const handleJoin = async () => {
     setError('');
     try {
-      const res = await fetch(`${API}/api/tournament/join`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const res = await authFetch(`${API}/api/tournament/join`, {
+        method: 'POST',
         body: JSON.stringify({ userId: user._id }),
       });
       const data = await res.json();
@@ -53,8 +53,8 @@ export default function Tournament() {
   const handleLeave = async () => {
     setError('');
     try {
-      const res = await fetch(`${API}/api/tournament/leave`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const res = await authFetch(`${API}/api/tournament/leave`, {
+        method: 'POST',
         body: JSON.stringify({ userId: user._id }),
       });
       const data = await res.json();
@@ -67,8 +67,8 @@ export default function Tournament() {
     if (!window.confirm('Cancel this tournament? This cannot be undone.')) return;
     setError('');
     try {
-      const res = await fetch(`${API}/api/tournament/cancel`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const res = await authFetch(`${API}/api/tournament/cancel`, {
+        method: 'POST',
         body: JSON.stringify({ adminId: user._id }),
       });
       const data = await res.json();
@@ -80,8 +80,8 @@ export default function Tournament() {
   const handleStart = async () => {
     setError('');
     try {
-      const res = await fetch(`${API}/api/tournament/start`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const res = await authFetch(`${API}/api/tournament/start`, {
+        method: 'POST',
         body: JSON.stringify({ adminId: user._id }),
       });
       const data = await res.json();
@@ -93,8 +93,8 @@ export default function Tournament() {
   const handleReport = async (round, matchIndex, winnerId, bracketType) => {
     setError('');
     try {
-      const res = await fetch(`${API}/api/tournament/report`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const res = await authFetch(`${API}/api/tournament/report`, {
+        method: 'POST',
         body: JSON.stringify({ adminId: user._id, tournamentId: tournament._id, round, matchIndex, bracketType, winnerId }),
       });
       const data = await res.json();

@@ -1,5 +1,9 @@
 import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+
+const signToken = (userId) =>
+  jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
 export const registerUser = async (req, res) => {
   try {
@@ -20,7 +24,8 @@ export const registerUser = async (req, res) => {
     const user = await User.create({ username, password: hashedPassword });
 
     const { password: _, ...userWithoutPassword } = user.toObject();
-    res.status(201).json(userWithoutPassword);
+    const token = signToken(user._id);
+    res.status(201).json({ ...userWithoutPassword, token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -47,7 +52,8 @@ export const loginUser = async (req, res) => {
     }
 
     const { password: _, ...userWithoutPassword } = user.toObject();
-    res.status(200).json(userWithoutPassword);
+    const token = signToken(user._id);
+    res.status(200).json({ ...userWithoutPassword, token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

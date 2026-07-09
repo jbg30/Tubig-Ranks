@@ -5,12 +5,13 @@ import {
   getMyParty,
   leaveParty,
 } from '../controllers/partyController.js';
+import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/invite', invitePartyMember);
-router.post('/respond', respondToPartyInvite);
+router.post('/invite', protect, invitePartyMember);
+router.post('/respond', protect, respondToPartyInvite);
 router.get('/:userId', getMyParty);
-router.post('/leave', leaveParty);
+router.post('/leave', protect, leaveParty);
 
 export default router;

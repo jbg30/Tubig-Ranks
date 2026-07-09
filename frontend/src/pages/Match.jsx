@@ -1,4 +1,4 @@
-﻿import API from '../api.js';
+﻿import API, { authFetch } from '../api.js';
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
@@ -70,8 +70,8 @@ export default function Match() {
     leavingRef.current = true;
     clearInterval(pollRef.current);
     try {
-      await fetch(`${API}/api/matches/leave`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      await authFetch(`${API}/api/matches/leave`, {
+        method: 'POST',
         body: JSON.stringify({ userId: user._id, matchId: match._id }),
       });
     } catch {}
@@ -80,8 +80,8 @@ export default function Match() {
 
   const handleReportResult = async (winningTeam) => {
     try {
-      const res = await fetch(`${API}/api/matches/${id}/result`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const res = await authFetch(`${API}/api/matches/${id}/result`, {
+        method: 'POST',
         body: JSON.stringify({ userId: user._id, winningTeam }),
       });
       const data = await res.json();

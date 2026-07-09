@@ -1,4 +1,4 @@
-﻿import API from '../api.js';
+﻿import API, { authFetch } from '../api.js';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
@@ -33,8 +33,8 @@ export default function Settings() {
   const handleUpdateUsername = async () => {
     setUsernameError(''); setUsernameSuccess('');
     try {
-      const res = await fetch(`${API}/api/users/update-username`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const res = await authFetch(`${API}/api/users/update-username`, {
+        method: 'POST',
         body: JSON.stringify({ userId: user._id, newUsername }),
       });
       const data = await res.json();
@@ -48,8 +48,8 @@ export default function Settings() {
   const handleUpdatePassword = async () => {
     setPasswordError(''); setPasswordSuccess('');
     try {
-      const res = await fetch(`${API}/api/users/update-password`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const res = await authFetch(`${API}/api/users/update-password`, {
+        method: 'POST',
         body: JSON.stringify({ userId: user._id, currentPassword, newPassword }),
       });
       const data = await res.json();
@@ -62,8 +62,8 @@ export default function Settings() {
   const handleDeleteAccount = async () => {
     if (!window.confirm('Are you sure you want to delete your account? This cannot be undone.')) return;
     try {
-      await fetch(`${API}/api/users/delete-account`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      await authFetch(`${API}/api/users/delete-account`, {
+        method: 'POST',
         body: JSON.stringify({ userId: user._id }),
       });
       await logoutUser();

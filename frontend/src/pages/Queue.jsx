@@ -1,4 +1,4 @@
-﻿import API from '../api.js';
+﻿import API, { authFetch } from '../api.js';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
@@ -30,7 +30,7 @@ export default function Queue() {
     try {
       const url = partyId ? `${API}/api/queue/join-party` : `${API}/api/queue/join`;
       const body = partyId ? { partyId, userId: user._id } : { userId: user._id, mode };
-      const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      const res = await authFetch(url, { method: 'POST', body: JSON.stringify(body) });
       const data = await res.json();
       if (res.status === 409) { setStatus('waiting'); pollRef.current = setInterval(checkQueue, 2000); return; }
       if (!res.ok) { setError(data.error || 'Could not join queue'); setStatus('error'); return; }
@@ -44,7 +44,7 @@ export default function Queue() {
   const checkQueue = async () => {
     if (leavingRef.current) return;
     try {
-      await fetch(`${API}/api/queue/heartbeat`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user._id }) });
+      await authFetch(`${API}/api/queue/heartbeat`, { method: 'POST', body: JSON.stringify({ userId: user._id }) });
       const res = await fetch(`${API}/api/queue/status`);
       const data = await res.json();
       const stillQueued = data.queue.find((entry) => entry.userId === user._id || entry.partyMemberIds?.includes(user._id));
@@ -67,8 +67,8 @@ export default function Queue() {
     clearInterval(timerRef.current);
     try {
       const url = partyId ? `${API}/api/party/leave` : `${API}/api/queue/leave`;
-      await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user._id }) });
-      if (partyId) await fetch(`${API}/api/queue/leave`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ userId: user._id }) });
+      await authFetch(url, { method: 'POST', body: JSON.stringify({ userId: user._id }) });
+      if (partyId) await authFetch(`${API}/api/queue/leave`, { method: 'POST', body: JSON.stringify({ userId: user._id }) });
     } catch {}
     navigate('/lobby');
   };

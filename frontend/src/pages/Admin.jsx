@@ -1,4 +1,4 @@
-﻿import API from '../api.js';
+﻿import API, { authFetch } from '../api.js';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
@@ -33,7 +33,7 @@ export default function Admin() {
 
   const fetchPending = async () => {
     try {
-      const res = await fetch(`${API}/api/users/pending/${user._id}`);
+      const res = await authFetch(`${API}/api/users/pending/${user._id}`);
       const data = await res.json();
       if (res.ok) setPending(data);
     } catch {}
@@ -41,8 +41,8 @@ export default function Admin() {
 
   const handleApprove = async (userId) => {
     try {
-      await fetch(`${API}/api/users/approve`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      await authFetch(`${API}/api/users/approve`, {
+        method: 'POST',
         body: JSON.stringify({ adminId: user._id, userId }),
       });
       fetchPending();
@@ -52,12 +52,12 @@ export default function Admin() {
   const handleResetPassword = async () => {
     setResetMessage(''); setResetSuccess(false);
     try {
-      const usersRes = await fetch(`${API}/api/users`);
+      const usersRes = await authFetch(`${API}/api/users`);
       const allUsers = await usersRes.json();
       const targetUser = allUsers.find((u) => u.username.toLowerCase() === resetUsername.toLowerCase());
       if (!targetUser) { setResetMessage('No user found with that username.'); return; }
-      const res = await fetch(`${API}/api/users/admin-reset-password`, {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
+      const res = await authFetch(`${API}/api/users/admin-reset-password`, {
+        method: 'POST',
         body: JSON.stringify({ adminId: user._id, targetUserId: targetUser._id, newPassword }),
       });
       const data = await res.json();

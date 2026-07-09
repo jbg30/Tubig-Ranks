@@ -1,4 +1,4 @@
-﻿import API from '../api.js';
+﻿import API, { authFetch } from '../api.js';
 import { createContext, useContext, useState, useEffect } from 'react';
 import socket from '../socket';
 
@@ -18,6 +18,16 @@ export function UserProvider({ children }) {
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    const handle = () => {
+      localStorage.removeItem('matchmaking_user');
+      setUser(null);
+      window.location.href = '/';
+    };
+    window.addEventListener('auth:unauthorized', handle);
+    return () => window.removeEventListener('auth:unauthorized', handle);
+  }, []);
+
   const loginUser = (userData) => {
     localStorage.setItem('matchmaking_user', JSON.stringify(userData));
     setUser(userData);
@@ -33,9 +43,8 @@ export function UserProvider({ children }) {
       const u = JSON.parse(stored);
       if (u?.status === 'queued') {
         try {
-          await fetch(`${API}/api/queue/leave`, {
+          await authFetch(`${API}/api/queue/leave`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ userId: u._id }),
           });
         } catch (err) {
@@ -54,8 +63,9 @@ export function UserProvider({ children }) {
       const res = await fetch(`${API}/api/users/${user._id}`);
       const data = await res.json();
       if (res.ok) {
-        localStorage.setItem('matchmaking_user', JSON.stringify(data));
-        setUser(data);
+        const updated = { ...data, token: user.token };
+        localStorage.setItem('matchmaking_user', JSON.stringify(updated));
+        setUser(updated);
       }
     } catch (err) {
       // ignore

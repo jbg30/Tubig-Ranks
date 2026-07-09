@@ -1,4 +1,4 @@
-﻿import API from '../api.js';
+﻿import API, { authFetch } from '../api.js';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
@@ -99,7 +99,7 @@ export default function Lobby() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch(`${API}/api/users`);
+      const res = await authFetch(`${API}/api/users`);
       const data = await res.json();
       if (res.ok) setAllUsers(data);
     } catch (err) {
@@ -150,9 +150,8 @@ export default function Lobby() {
   const handleSendFriendRequest = async () => {
     setFriendError('');
     try {
-      const res = await fetch(`${API}/api/friends/request`, {
+      const res = await authFetch(`${API}/api/friends/request`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ requesterId: user._id, recipientUsername: friendUsername }),
       });
       const data = await res.json();
@@ -168,9 +167,8 @@ export default function Lobby() {
 
   const handleRespondToRequest = async (friendshipId, accept) => {
     try {
-      await fetch(`${API}/api/friends/respond`, {
+      await authFetch(`${API}/api/friends/respond`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ friendshipId, accept }),
       });
       fetchPendingRequests();
@@ -182,9 +180,8 @@ export default function Lobby() {
 
   const handleRemoveFriend = async (friendId) => {
     try {
-      await fetch(`${API}/api/friends/remove`, {
+      await authFetch(`${API}/api/friends/remove`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user._id, friendId }),
       });
       fetchFriends();
@@ -196,9 +193,8 @@ export default function Lobby() {
   const handleInviteToParty = async (friendId) => {
     setPartyError('');
     try {
-      const res = await fetch(`${API}/api/party/invite`, {
+      const res = await authFetch(`${API}/api/party/invite`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ leaderId: user._id, friendId }),
       });
       const data = await res.json();
@@ -214,9 +210,8 @@ export default function Lobby() {
 
   const handleRespondToParty = async (accept) => {
     try {
-      await fetch(`${API}/api/party/respond`, {
+      await authFetch(`${API}/api/party/respond`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ partyId: party._id, userId: user._id, accept }),
       });
       fetchParty();
@@ -227,9 +222,8 @@ export default function Lobby() {
 
   const handleLeaveParty = async () => {
     try {
-      await fetch(`${API}/api/party/leave`, {
+      await authFetch(`${API}/api/party/leave`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: user._id }),
       });
       setParty(null);
@@ -243,9 +237,8 @@ export default function Lobby() {
   if (!opponent) return;
 
   try {
-    const res = await fetch(`${API}/api/matches/challenge`, {
+    const res = await authFetch(`${API}/api/matches/challenge`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ challengerId: user._id, opponentId: opponent._id }),
     });
     const data = await res.json();
@@ -274,9 +267,8 @@ export default function Lobby() {
   const handleCreateTournament = async () => {
     setHostError('');
     try {
-      const res = await fetch(`${API}/api/tournament/create`, {
+      const res = await authFetch(`${API}/api/tournament/create`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ adminId: user._id, name: hostName, format: hostFormat, seeding: hostSeeding }),
       });
       const data = await res.json();

@@ -1,17 +1,18 @@
 import express from 'express';
 import { registerUser, loginUser, getUsers, getUserById, updatePassword, updateUsername, deleteAccount, getPendingApprovals, approveUser, adminResetPassword } from '../controllers/userController.js';
+import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);
-router.get('/', getUsers);
+router.get('/', protect, getUsers);
 router.get('/:id', getUserById);
-router.post('/update-username', updateUsername);
-router.post('/update-password', updatePassword);
-router.post('/delete-account', deleteAccount);
-router.get('/pending/:adminId', getPendingApprovals);
-router.post('/approve', approveUser);
-router.post('/admin-reset-password', adminResetPassword);
+router.post('/update-username', protect, updateUsername);
+router.post('/update-password', protect, updatePassword);
+router.post('/delete-account', protect, deleteAccount);
+router.get('/pending/:adminId', protect, getPendingApprovals);
+router.post('/approve', protect, approveUser);
+router.post('/admin-reset-password', protect, adminResetPassword);
 
 export default router;
