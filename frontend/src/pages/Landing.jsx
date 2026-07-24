@@ -40,7 +40,7 @@ export default function Landing() {
 
       <div className="gw-hero">
         <img src={tubigLogo} alt="Tubig Ranks" className="gw-hero-logo" />
-        <div className="gw-eyebrow">Season 2 &middot; Now live</div>
+        <div className="gw-eyebrow">Season 1 &middot; Now live</div>
         <h1>PROVE YOUR RANK.</h1>
         <p className="gw-hero-sub">Skill-based matchmaking, live leaderboards, and bracket tournaments.</p>
         <div className="gw-hero-btns">
