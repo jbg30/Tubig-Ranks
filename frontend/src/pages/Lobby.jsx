@@ -365,7 +365,7 @@ export default function Lobby() {
                   : <div className={`lb-avatar ${avatarClass}`} title={getRank(u.mmr).name} />
                 }
                 <div className="lb-info">
-                  <div className="lb-name" style={{ fontWeight: u._id === user._id ? 700 : 500 }}>{u.username}</div>
+                  <div className="lb-name glitch" data-text={u.username} style={{ fontWeight: u._id === user._id ? 700 : 500 }}>{u.username}</div>
                   <div className="lb-mmr">{u.mmr.toLocaleString()} ELO</div>
                 </div>
               </div>
@@ -406,7 +406,7 @@ export default function Lobby() {
                 </div>
               );
             })}
-            <button onClick={() => navigate('/ranks')} style={{ marginTop: 8, width: '100%', padding: '10px', background: 'transparent', border: '1px solid #1e4976', borderRadius: 8, color: '#5ba3d9', fontSize: 12, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', cursor: 'pointer' }}>View Ranks</button>
+            <button onClick={() => navigate('/ranks')} style={{ marginTop: 8, width: '100%', padding: '10px', background: 'transparent', border: '1px solid var(--border)', color: 'var(--cyan)', fontSize: 12, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', cursor: 'pointer' }}>View Ranks</button>
           </div>
         )}
 
@@ -422,11 +422,11 @@ export default function Lobby() {
               <div className="fr-title">Friends</div>
             )}
             {pendingRequests.length > 0 && (
-              <div style={{ background: '#112233', border: '1px solid #2e6da4', borderRadius: 10, padding: '12px 14px' }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: '#5ba3d9', marginBottom: 8, letterSpacing: 1, textTransform: 'uppercase' }}>Pending ({pendingRequests.length})</div>
+              <div style={{ background: 'var(--panel2)', border: '1px solid var(--border-strong)', borderRadius: 10, padding: '12px 14px' }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--cyan)', marginBottom: 8, letterSpacing: 1, textTransform: 'uppercase' }}>Pending ({pendingRequests.length})</div>
                 {pendingRequests.map((req) => (
                   <div key={req._id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '4px 0' }}>
-                    <span style={{ fontSize: 13, color: '#e8f1fa' }}>{req.requester.username}</span>
+                    <span style={{ fontSize: 13, color: 'var(--text)' }}>{req.requester.username}</span>
                     <div style={{ display: 'flex', gap: 6 }}>
                       <button className="btn-accept" onClick={() => handleRespondToRequest(req._id, true)}>Accept</button>
                       <button className="btn-decline" onClick={() => handleRespondToRequest(req._id, false)}>Decline</button>
@@ -437,9 +437,36 @@ export default function Lobby() {
             )}
             {!showAllPlayers && (
               <>
-                <div className="fr-add">
-                  <input type="text" placeholder="Add by username" value={friendUsername} onChange={(e) => setFriendUsername(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && handleSendFriendRequest()} />
-                  <button onClick={handleSendFriendRequest}>Add</button>
+                <div className="fr-add-card">
+                  <div className="fr-add-header">
+                    <div className="fr-add-title">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <line x1="19" y1="8" x2="19" y2="14" />
+                        <line x1="16" y1="11" x2="22" y2="11" />
+                      </svg>
+                      Add friend
+                    </div>
+                    <div className="fr-add-dots"><span /><span /><span /></div>
+                  </div>
+                  <div className="fr-add-body">
+                    <div className="fr-add-group">
+                      <input
+                        type="text"
+                        placeholder=" "
+                        aria-label="Username"
+                        value={friendUsername}
+                        onChange={(e) => setFriendUsername(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSendFriendRequest()}
+                        className="fr-add-input"
+                      />
+                      <label className="fr-add-label" data-text="USERNAME">Username</label>
+                    </div>
+                    <button onClick={handleSendFriendRequest} className="fr-add-submit" data-text="ADD">
+                      <span className="btn-text">Add</span>
+                    </button>
+                  </div>
                 </div>
                 {friendError && <p className="fr-error">{friendError}</p>}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -501,7 +528,7 @@ export default function Lobby() {
             <button className="btn-decline" onClick={handleLeaveParty}>Cancel</button>
           </div>
         )}
-        {partyError && <p style={{ color: '#f87171', fontSize: 12, textAlign: 'center', marginBottom: 8 }}>{partyError}</p>}
+        {partyError && <p style={{ color: 'var(--danger)', fontSize: 12, textAlign: 'center', marginBottom: 8 }}>{partyError}</p>}
 
         {/* Player card(s) */}
         {(() => {
@@ -551,7 +578,7 @@ export default function Lobby() {
                     </select>
                     <button className="pc-tournament-btn" onClick={handleCreateTournament} disabled={!hostName.trim()}>Create Tournament <span>â€º</span></button>
                     <button className="lm-btn-ghost" style={{ marginTop: 4 }} onClick={() => { setShowHostForm(false); setHostError(''); }}>Cancel</button>
-                    {hostError && <p style={{ color: '#f87171', fontSize: 12, marginTop: 4 }}>{hostError}</p>}
+                    {hostError && <p style={{ color: 'var(--danger)', fontSize: 12, marginTop: 4 }}>{hostError}</p>}
                   </>
                 )
               ) : (
@@ -595,7 +622,7 @@ export default function Lobby() {
                       <button className="pc-tourn-tab active" onClick={handleCreateTournament} disabled={!hostName.trim()}>Create</button>
                       <button className="pc-tourn-tab" onClick={() => { setShowHostForm(false); setHostError(''); }}>Cancel</button>
                     </div>
-                    {hostError && <p style={{ color: '#f87171', fontSize: 11, margin: '4px 0 0' }}>{hostError}</p>}
+                    {hostError && <p style={{ color: 'var(--danger)', fontSize: 11, margin: '4px 0 0' }}>{hostError}</p>}
                   </>
                 )
               ) : null}
@@ -627,12 +654,12 @@ export default function Lobby() {
                     <div className="pc-rank-label" style={{ color: getRank(user.mmr).color }}>
                       {user.isPlaced ? getRank(user.mmr).name : 'Unranked'}
                     </div>
-                    <div className="pc-username">{user.username}</div>
+                    <div className="pc-username glitch" data-text={user.username}>{user.username}</div>
                     <div className="pc-elo">
                       {user.isPlaced ? `${user.mmr.toLocaleString()} ELO` : `Placement (${user.placementGamesPlayed ?? 0}/5)`}
                     </div>
                     {user.lastMatchEloChange !== null && user.lastMatchEloChange !== undefined && (
-                      <div className="pc-elo-change" style={{ color: user.lastMatchEloChange >= 0 ? '#3dcf8e' : '#f87171' }}>
+                      <div className="pc-elo-change" style={{ color: user.lastMatchEloChange >= 0 ? 'var(--success)' : 'var(--danger)' }}>
                         Last match: {user.lastMatchEloChange >= 0 ? '+' : ''}{user.lastMatchEloChange} ELO
                       </div>
                     )}
@@ -701,11 +728,11 @@ export default function Lobby() {
             ))}
           </div>
           {!user.isApproved ? (
-            <p style={{ fontStyle: 'italic', color: '#f0a500', fontSize: 13, textAlign: 'center' }}>
+            <p style={{ fontStyle: 'italic', color: 'var(--warning)', fontSize: 13, textAlign: 'center' }}>
               Your account is pending admin approval.
             </p>
           ) : party && party.status === 'active' && party.leader._id !== user._id ? (
-            <p style={{ fontStyle: 'italic', color: '#4e7a9b', fontSize: 13, textAlign: 'center' }}>
+            <p style={{ fontStyle: 'italic', color: 'var(--sub)', fontSize: 13, textAlign: 'center' }}>
               Waiting for {party.leader.username} to start the queue...
             </p>
           ) : (
@@ -772,15 +799,36 @@ export default function Lobby() {
           </div>
         ) : (
           <>
-        <div className="fr-add">
-          <input
-            type="text"
-            placeholder="Add by username"
-            value={friendUsername}
-            onChange={(e) => setFriendUsername(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleSendFriendRequest()}
-          />
-          <button onClick={handleSendFriendRequest}>Add</button>
+        <div className="fr-add-card">
+          <div className="fr-add-header">
+            <div className="fr-add-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                <circle cx="9" cy="7" r="4" />
+                <line x1="19" y1="8" x2="19" y2="14" />
+                <line x1="16" y1="11" x2="22" y2="11" />
+              </svg>
+              Add friend
+            </div>
+            <div className="fr-add-dots"><span /><span /><span /></div>
+          </div>
+          <div className="fr-add-body">
+            <div className="fr-add-group">
+              <input
+                type="text"
+                placeholder=" "
+                aria-label="Username"
+                value={friendUsername}
+                onChange={(e) => setFriendUsername(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSendFriendRequest()}
+                className="fr-add-input"
+              />
+              <label className="fr-add-label" data-text="USERNAME">Username</label>
+            </div>
+            <button onClick={handleSendFriendRequest} className="fr-add-submit" data-text="ADD">
+              <span className="btn-text">Add</span>
+            </button>
+          </div>
         </div>
         {friendError && <p className="fr-error">{friendError}</p>}
 
@@ -829,36 +877,36 @@ export default function Lobby() {
               position: 'fixed',
               top: contextMenu.y,
               left: contextMenu.x,
-              background: '#112233',
-              border: '1px solid #1e4976',
-              borderRadius: 8,
-              boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+              background: 'var(--panel2)',
+              border: '1px solid var(--border-strong)',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.5)',
               zIndex: 2000,
               minWidth: 150,
               overflow: 'hidden',
+              fontFamily: "'Fira Code', Consolas, monospace",
             }}
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => { navigate(`/profile/${ctxUser._id}`); closeContextMenu(); }}
-              style={{ display: 'block', width: '100%', padding: '10px 14px', textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer', fontSize: 13, color: '#e8f1fa' }}
+              style={{ display: 'block', width: '100%', padding: '10px 14px', textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--text)', fontFamily: 'inherit' }}
             >
               View Profile
             </button>
             {contextMenu.isFriend && !party && isOnline && ctxUser.status === 'idle' && (
               <button
                 onClick={() => { handleInviteToParty(ctxUser._id); closeContextMenu(); }}
-                style={{ display: 'block', width: '100%', padding: '10px 14px', textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer', fontSize: 13, color: '#e8f1fa' }}
+                style={{ display: 'block', width: '100%', padding: '10px 14px', textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--text)', fontFamily: 'inherit' }}
               >
                 Invite to Party
               </button>
             )}
             {contextMenu.isFriend && (
               <>
-                <div style={{ borderTop: '1px solid #1e4976' }} />
+                <div style={{ borderTop: '1px solid var(--border)' }} />
                 <button
                   onClick={() => { handleRemoveFriend(ctxUser._id); closeContextMenu(); }}
-                  style={{ display: 'block', width: '100%', padding: '10px 14px', textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer', fontSize: 13, color: '#f87171' }}
+                  style={{ display: 'block', width: '100%', padding: '10px 14px', textAlign: 'left', border: 'none', background: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--danger)', fontFamily: 'inherit' }}
                 >
                   Remove Friend
                 </button>

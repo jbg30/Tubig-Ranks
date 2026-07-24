@@ -1,8 +1,9 @@
-﻿import API, { authFetch } from '../api.js';
+import API, { authFetch } from '../api.js';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import TopNav from '../components/TopNav';
+import '../glitch-theme.css';
 
 export default function Queue() {
   const { user } = useUser();
@@ -80,9 +81,9 @@ export default function Queue() {
       <TopNav showHome={false} />
       <div style={{
         minHeight: '100vh',
-        background: '#0d1b2a',
-        color: '#e8f1fa',
-        fontFamily: 'sans-serif',
+        background: 'var(--bg)',
+        color: 'var(--text)',
+        fontFamily: "'Fira Code', Consolas, monospace",
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -93,20 +94,21 @@ export default function Queue() {
           <div style={{ position: 'relative', width: 160, height: 160, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <div style={{
               position: 'absolute', inset: 0, borderRadius: '50%',
-              border: '2px solid #1e4976',
+              border: '2px solid var(--border)',
               animation: status === 'waiting' ? 'queuePulse 2s ease-in-out infinite' : 'none',
             }} />
             <div style={{
               position: 'absolute', inset: 14, borderRadius: '50%',
-              border: '2px solid #2e6da4',
+              border: '2px solid var(--border-strong)',
               animation: status === 'waiting' ? 'queuePulse 2s ease-in-out infinite 0.4s' : 'none',
             }} />
             <div style={{
               width: 100, height: 100, borderRadius: '50%',
-              background: '#0f2236',
-              border: '2px solid #3dcf8e',
+              background: 'var(--panel)',
+              border: '2px solid var(--cyan)',
+              boxShadow: '0 0 24px rgba(0, 242, 234, 0.25)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 22, color: '#3dcf8e', fontWeight: 800,
+              fontSize: 22, color: 'var(--cyan)', fontWeight: 800,
               letterSpacing: 2,
             }}>
               {status === 'waiting' ? formatTime(elapsed) : status === 'joining' ? '...' : '!'}
@@ -122,43 +124,43 @@ export default function Queue() {
 
           {/* Status text */}
           <div>
-            <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 32, letterSpacing: 4, marginBottom: 6 }}>
+            <div className="glitch" data-text={status === 'joining' ? 'JOINING QUEUE' : status === 'waiting' ? 'SEARCHING' : 'ERROR'} style={{ fontSize: 30, fontWeight: 700, letterSpacing: 3, textTransform: 'uppercase', marginBottom: 6, justifyContent: 'center' }}>
               {status === 'joining' ? 'Joining Queue' : status === 'waiting' ? 'Searching' : 'Error'}
             </div>
-            <div style={{ fontSize: 13, color: '#4e7a9b', letterSpacing: 1, textTransform: 'uppercase' }}>
-              {mode}{partyId ? ' Â· Party' : ''}
+            <div style={{ fontSize: 13, color: 'var(--sub)', letterSpacing: 1, textTransform: 'uppercase' }}>
+              {mode}{partyId ? ' · Party' : ''}
             </div>
           </div>
 
           {/* Player count */}
           {queueInfo && (
-            <div style={{ background: '#0f2236', border: '1px solid #1e4976', borderRadius: 10, padding: '12px 32px' }}>
-              <span style={{ fontSize: 22, fontWeight: 800, color: '#3dcf8e' }}>{queueInfo.queueSize}</span>
-              <span style={{ fontSize: 16, color: '#2e4a62', margin: '0 8px' }}>/</span>
-              <span style={{ fontSize: 22, fontWeight: 800, color: '#e8f1fa' }}>{queueInfo.needed}</span>
-              <div style={{ fontSize: 11, color: '#4e7a9b', letterSpacing: 1.5, textTransform: 'uppercase', marginTop: 4 }}>Players Ready</div>
+            <div style={{ background: 'var(--panel)', border: '1px solid rgba(0,242,234,0.2)', boxShadow: '0 0 1rem rgba(0,242,234,0.08)', padding: '12px 32px' }}>
+              <span style={{ fontSize: 22, fontWeight: 800, color: 'var(--cyan)' }}>{queueInfo.queueSize}</span>
+              <span style={{ fontSize: 16, color: 'var(--faint)', margin: '0 8px' }}>/</span>
+              <span style={{ fontSize: 22, fontWeight: 800, color: 'var(--text)' }}>{queueInfo.needed}</span>
+              <div style={{ fontSize: 11, color: 'var(--sub)', letterSpacing: 1.5, textTransform: 'uppercase', marginTop: 4 }}>Players Ready</div>
             </div>
           )}
 
-          {status === 'error' && <p style={{ color: '#f87171', fontSize: 13 }}>{error}</p>}
+          {status === 'error' && <p style={{ color: 'var(--danger)', fontSize: 13 }}>{error}</p>}
 
           <button
             onClick={handleCancel}
             style={{
               background: 'transparent',
-              border: '1px solid #8a1a2a',
-              borderRadius: 8,
-              color: '#f87171',
-              fontSize: 12,
+              border: '2px solid var(--danger)',
+              color: 'var(--danger)',
+              fontFamily: 'inherit',
+              fontSize: 11,
               fontWeight: 700,
-              letterSpacing: 1.5,
+              letterSpacing: '0.18em',
               textTransform: 'uppercase',
-              padding: '10px 32px',
+              padding: '0.75em 2em',
               cursor: 'pointer',
-              transition: 'background 0.15s',
+              transition: 'background 0.15s, color 0.15s',
             }}
-            onMouseEnter={(e) => e.currentTarget.style.background = '#2a0a14'}
-            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--danger)'; e.currentTarget.style.color = 'var(--bg)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = 'var(--danger)'; }}
           >
             Cancel
           </button>
@@ -167,5 +169,3 @@ export default function Queue() {
     </>
   );
 }
-
-

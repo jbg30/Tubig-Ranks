@@ -1,8 +1,9 @@
-﻿import API from '../api.js';
+import API from '../api.js';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getRank } from '../utils/ranks';
 import TopNav from '../components/TopNav';
+import '../glitch-theme.css';
 import diamondIcon from '../assets/Diamond rank.png';
 import rubyIcon from '../assets/Ruby rank.png';
 import emeraldIcon from '../assets/Emerald rank.png';
@@ -52,20 +53,21 @@ export default function TournamentLeaderboard() {
       <TopNav />
       <div style={{
         minHeight: '100vh',
-        background: '#0d1b2a',
-        color: '#e8f1fa',
-        fontFamily: 'sans-serif',
+        background: 'var(--bg)',
+        color: 'var(--text)',
+        fontFamily: "'Fira Code', Consolas, monospace",
         paddingTop: 80,
         paddingBottom: 60,
       }}>
         <div style={{ maxWidth: 620, margin: '0 auto', padding: '0 24px' }}>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
-            <h1 style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: 38,
-              letterSpacing: 4,
-              color: '#e8f1fa',
+            <h1 className="glitch" data-text="TOURNAMENT LEADERBOARD" style={{
+              fontSize: 28,
+              fontWeight: 700,
+              letterSpacing: 2,
+              textTransform: 'uppercase',
+              color: 'var(--text)',
               margin: 0,
             }}>
               Tournament Leaderboard
@@ -74,30 +76,31 @@ export default function TournamentLeaderboard() {
               onClick={() => navigate('/tournaments')}
               style={{
                 background: 'transparent',
-                border: '1px solid #1e4976',
-                borderRadius: 8,
-                color: '#5ba3d9',
+                border: '1px solid var(--border)',
+                color: 'var(--cyan)',
+                fontFamily: 'inherit',
                 fontSize: 12,
                 fontWeight: 700,
                 letterSpacing: 1.5,
                 textTransform: 'uppercase',
                 padding: '7px 14px',
                 cursor: 'pointer',
-                transition: 'color 0.15s, border-color 0.15s',
+                transition: 'border-color 0.15s',
+                flexShrink: 0,
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = '#e8f1fa'; e.currentTarget.style.borderColor = '#5ba3d9'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = '#5ba3d9'; e.currentTarget.style.borderColor = '#1e4976'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--border-strong)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; }}
             >
               History
             </button>
           </div>
 
-          {error && <p style={{ color: '#f87171', fontSize: 13, marginBottom: 12 }}>{error}</p>}
+          {error && <p style={{ color: 'var(--danger)', fontSize: 13, marginBottom: 12 }}>{error}</p>}
 
           {loading ? (
-            <div style={{ textAlign: 'center', color: '#4e7a9b', marginTop: 60 }}>Loading...</div>
+            <div style={{ textAlign: 'center', color: 'var(--sub)', marginTop: 60 }}>Loading...</div>
           ) : players.length === 0 ? (
-            <div style={{ textAlign: 'center', color: '#2e4a62', marginTop: 60, fontSize: 14 }}>No tournament points awarded yet.</div>
+            <div style={{ textAlign: 'center', color: 'var(--faint)', marginTop: 60, fontSize: 14 }}>No tournament points awarded yet.</div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {players.map((p, i) => {
@@ -110,20 +113,19 @@ export default function TournamentLeaderboard() {
                     key={p._id}
                     onClick={() => navigate(`/profile/${p._id}`)}
                     style={{
-                      background: '#0f2236',
-                      border: `1px solid ${isTop3 ? medalColor + '66' : '#1e4976'}`,
-                      borderLeft: `4px solid ${isTop3 ? medalColor : '#1e4976'}`,
-                      borderRadius: 12,
+                      background: 'var(--panel)',
+                      border: `1px solid ${isTop3 ? medalColor + '66' : 'var(--border)'}`,
+                      borderLeft: `4px solid ${isTop3 ? medalColor : 'var(--border)'}`,
                       padding: '14px 20px',
                       display: 'flex',
                       alignItems: 'center',
                       gap: 16,
                       cursor: 'pointer',
-                      transition: 'background 0.15s',
+                      transition: 'border-color 0.15s',
                       boxShadow: isTop3 ? `0 0 12px ${medalColor}22` : 'none',
                     }}
-                    onMouseEnter={(e) => e.currentTarget.style.background = '#112233'}
-                    onMouseLeave={(e) => e.currentTarget.style.background = '#0f2236'}
+                    onMouseEnter={(e) => e.currentTarget.style.borderColor = isTop3 ? medalColor : 'var(--border-strong)'}
+                    onMouseLeave={(e) => e.currentTarget.style.borderColor = isTop3 ? medalColor + '66' : 'var(--border)'}
                   >
                     {/* Rank number */}
                     <div style={{
@@ -131,7 +133,7 @@ export default function TournamentLeaderboard() {
                       textAlign: 'center',
                       fontWeight: 800,
                       fontSize: 15,
-                      color: medalColor ?? '#2e4a62',
+                      color: medalColor ?? 'var(--faint)',
                       flexShrink: 0,
                     }}>
                       {i + 1}
@@ -162,17 +164,17 @@ export default function TournamentLeaderboard() {
                     {/* Name + rank */}
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 700, fontSize: 15 }}>{p.username}</div>
-                      <div style={{ fontSize: 12, color: rank?.color ?? '#4e7a9b', marginTop: 2 }}>
+                      <div style={{ fontSize: 12, color: rank?.color ?? 'var(--sub)', marginTop: 2 }}>
                         {rank ? rank.name : 'Unranked'}
                       </div>
                     </div>
 
                     {/* Points */}
                     <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                      <div style={{ fontSize: 18, fontWeight: 800, color: medalColor ?? '#e8f1fa' }}>
+                      <div style={{ fontSize: 18, fontWeight: 800, color: medalColor ?? 'var(--text)' }}>
                         {p.tournamentPoints}
                       </div>
-                      <div style={{ fontSize: 11, color: '#4e7a9b', letterSpacing: 1, textTransform: 'uppercase' }}>pts</div>
+                      <div style={{ fontSize: 11, color: 'var(--sub)', letterSpacing: 1, textTransform: 'uppercase' }}>pts</div>
                     </div>
                   </div>
                 );
@@ -184,5 +186,3 @@ export default function TournamentLeaderboard() {
     </>
   );
 }
-
-

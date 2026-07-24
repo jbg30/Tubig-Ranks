@@ -1,9 +1,10 @@
-﻿import API, { authFetch } from '../api.js';
+import API, { authFetch } from '../api.js';
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import { getRank } from '../utils/ranks';
 import TopNav from '../components/TopNav';
+import '../glitch-theme.css';
 
 const MEDAL_COLORS = ['#dab640', '#999999', '#8b4a2c'];
 
@@ -111,7 +112,7 @@ export default function Tournament() {
   };
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: '#0d1b2a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4e7a9b', fontFamily: 'sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--sub)', fontFamily: "'Fira Code', Consolas, monospace" }}>
       Loading...
     </div>
   );
@@ -119,8 +120,8 @@ export default function Tournament() {
   if (!tournament) return (
     <>
       <TopNav />
-      <div style={{ minHeight: '100vh', background: '#0d1b2a', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#e8f1fa', fontFamily: 'sans-serif', gap: 16 }}>
-        <div style={{ fontSize: 18, color: '#4e7a9b' }}>{readOnly ? 'Tournament not found' : 'No tournament in progress'}</div>
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'var(--text)', fontFamily: "'Fira Code', Consolas, monospace", gap: 16 }}>
+        <div style={{ fontSize: 18, color: 'var(--sub)' }}>{readOnly ? 'Tournament not found' : 'No tournament in progress'}</div>
         <button onClick={() => navigate(readOnly ? '/tournaments' : '/lobby')} style={ghostBtn}>{readOnly ? 'Back to Tournaments' : 'Back to Lobby'}</button>
       </div>
     </>
@@ -307,30 +308,29 @@ export default function Tournament() {
 
     return (
       <div key={match._id} style={{
-        background: isMine ? '#1a2e1a' : '#0f2236',
-        border: `1px solid ${isMine ? '#3dcf8e' : '#1e4976'}`,
-        borderRadius: 10,
+        background: isMine ? 'rgba(47,227,160,0.06)' : 'var(--panel)',
+        border: `1px solid ${isMine ? 'rgba(47,227,160,0.5)' : 'var(--border)'}`,
         padding: '12px 14px',
         marginBottom: 8,
         minWidth: 200,
       }}>
         {(isGrandFinal || isThirdPlace || isLbFinal) && (
-          <div style={{ fontSize: 10, color: '#4e7a9b', fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 6 }}>
-            {isGrandFinal ? (match.matchIndex === 0 ? 'Grand Final' : 'Grand Final â€” Reset') : isThirdPlace ? 'Third Place' : 'LB Final'}
+          <div style={{ fontSize: 10, color: 'var(--sub)', fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', marginBottom: 6 }}>
+            {isGrandFinal ? (match.matchIndex === 0 ? 'Grand Final' : 'Grand Final — Reset') : isThirdPlace ? 'Third Place' : 'LB Final'}
           </div>
         )}
         {match.status === 'bye' ? (
-          <div style={{ color: '#4e7a9b', fontSize: 13 }}>{p1Name} â€” bye</div>
+          <div style={{ color: 'var(--sub)', fontSize: 13 }}>{p1Name} — bye</div>
         ) : (
           <>
-            <div style={{ fontSize: 13, color: '#e8f1fa', marginBottom: 4 }}>
-              <span style={{ fontWeight: match.winner?._id === match.player1?._id ? 700 : 400, color: match.winner?._id === match.player1?._id ? '#3dcf8e' : '#e8f1fa' }}>{p1Name}</span>
-              {isGrandFinal && match.player1 && <span style={{ color: '#4e7a9b', fontSize: 11 }}> (W)</span>}
-              <span style={{ color: '#2e4a62', margin: '0 6px' }}>vs</span>
-              <span style={{ fontWeight: match.winner?._id === match.player2?._id ? 700 : 400, color: match.winner?._id === match.player2?._id ? '#3dcf8e' : '#e8f1fa' }}>{p2Name}</span>
-              {isGrandFinal && match.player2 && <span style={{ color: '#4e7a9b', fontSize: 11 }}> (L)</span>}
+            <div style={{ fontSize: 13, color: 'var(--text)', marginBottom: 4 }}>
+              <span style={{ fontWeight: match.winner?._id === match.player1?._id ? 700 : 400, color: match.winner?._id === match.player1?._id ? 'var(--success)' : 'var(--text)' }}>{p1Name}</span>
+              {isGrandFinal && match.player1 && <span style={{ color: 'var(--sub)', fontSize: 11 }}> (W)</span>}
+              <span style={{ color: 'var(--faint)', margin: '0 6px' }}>vs</span>
+              <span style={{ fontWeight: match.winner?._id === match.player2?._id ? 700 : 400, color: match.winner?._id === match.player2?._id ? 'var(--success)' : 'var(--text)' }}>{p2Name}</span>
+              {isGrandFinal && match.player2 && <span style={{ color: 'var(--sub)', fontSize: 11 }}> (L)</span>}
             </div>
-            <div style={{ fontSize: 11, color: '#4e7a9b', textTransform: 'uppercase', letterSpacing: 1, marginBottom: canReport ? 8 : 0 }}>
+            <div style={{ fontSize: 11, color: 'var(--sub)', textTransform: 'uppercase', letterSpacing: 1, marginBottom: canReport ? 8 : 0 }}>
               {match.status}
             </div>
             {canReport && match.player1 && match.player2 && (
@@ -355,16 +355,16 @@ export default function Tournament() {
   return (
     <>
       <TopNav />
-      <div style={{ minHeight: '100vh', background: '#0d1b2a', color: '#e8f1fa', fontFamily: 'sans-serif', paddingTop: 80, paddingBottom: 60 }}>
+      <div style={{ minHeight: '100vh', background: 'var(--bg)', color: 'var(--text)', fontFamily: "'Fira Code', Consolas, monospace", paddingTop: 80, paddingBottom: 60 }}>
         <div style={{ maxWidth: 860, margin: '0 auto', padding: '0 24px' }}>
 
           {/* Header */}
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, gap: 16, flexWrap: 'wrap' }}>
             <div>
-              <h1 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 38, letterSpacing: 4, margin: '0 0 4px' }}>{tournament.name}</h1>
+              <h1 className="glitch" data-text={tournament.name.toUpperCase()} style={{ fontSize: 30, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', margin: '0 0 4px' }}>{tournament.name}</h1>
               <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: 16, fontWeight: 700, color: '#a3c4e0', textTransform: 'uppercase', letterSpacing: 2 }}>{formatFormat(tournament.format)}</span>
-                <span style={{ color: tournamentRank.color, fontSize: 16, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 2 }}>{tournamentRank.name} Tournament</span>
+                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--sub)', textTransform: 'uppercase', letterSpacing: 2 }}>{formatFormat(tournament.format)}</span>
+                <span style={{ color: tournamentRank.color, fontSize: 14, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 2 }}>{tournamentRank.name} Tournament</span>
               </div>
             </div>
             <button onClick={() => navigate(readOnly ? '/tournaments' : '/lobby')} style={ghostBtn}>
@@ -372,11 +372,11 @@ export default function Tournament() {
             </button>
           </div>
 
-          {error && <p style={{ color: '#f87171', fontSize: 13, marginBottom: 12 }}>{error}</p>}
+          {error && <p style={{ color: 'var(--danger)', fontSize: 13, marginBottom: 12 }}>{error}</p>}
 
           {/* My turn alert */}
           {!readOnly && myTurnMatch && (
-            <div style={{ background: '#0a2418', border: '1px solid #3dcf8e', borderRadius: 10, padding: '12px 18px', marginBottom: 20, color: '#3dcf8e', fontWeight: 700, fontSize: 14 }}>
+            <div style={{ background: 'rgba(47,227,160,0.06)', border: '1px solid rgba(47,227,160,0.5)', padding: '12px 18px', marginBottom: 20, color: 'var(--success)', fontWeight: 700, fontSize: 14 }}>
               It's your turn! Round {myTurnMatch.round} vs{' '}
               {(myTurnMatch.player1?._id === user._id ? myTurnMatch.player2?.username : myTurnMatch.player1?.username) || 'TBD'}
             </div>
@@ -385,15 +385,15 @@ export default function Tournament() {
           {/* Registration */}
           {tournament.status === 'registration' && (
             <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-              <div style={{ flex: 1, minWidth: 240, background: '#0f2236', border: '1px solid #1e4976', borderRadius: 14, overflow: 'hidden' }}>
-                <div style={{ padding: '12px 18px', borderBottom: '1px solid #1e4976', fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: '#4e7a9b' }}>
+              <div style={{ flex: 1, minWidth: 240, background: 'var(--panel)', border: '1px solid rgba(0,242,234,0.2)', boxShadow: '0 0 1.2rem rgba(0,242,234,0.06)', overflow: 'hidden' }}>
+                <div style={{ padding: '12px 18px', borderBottom: '1px solid var(--border)', fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: 'var(--sub)' }}>
                   Players ({tournament.participants.length})
                 </div>
                 {tournament.participants.length === 0 ? (
-                  <div style={{ padding: '18px', color: '#2e4a62', fontSize: 13 }}>No players yet.</div>
+                  <div style={{ padding: '18px', color: 'var(--faint)', fontSize: 13 }}>No players yet.</div>
                 ) : (
                   tournament.participants.map((p) => (
-                    <div key={p._id} style={{ padding: '10px 18px', borderBottom: '1px solid #0d1b2a', fontSize: 14, color: p._id === user._id ? '#3dcf8e' : '#e8f1fa' }}>
+                    <div key={p._id} style={{ padding: '10px 18px', borderBottom: '1px solid var(--bg)', fontSize: 14, color: p._id === user._id ? 'var(--success)' : 'var(--text)' }}>
                       {p.username}{p._id === user._id ? ' (you)' : ''}
                     </div>
                   ))
@@ -405,12 +405,14 @@ export default function Tournament() {
                   {isParticipant ? (
                     <button onClick={handleLeave} style={dangerBtn}>Leave Tournament</button>
                   ) : (
-                    <button onClick={handleJoin} style={primaryBtn}>Enter Tournament</button>
+                    <button onClick={handleJoin} className="gbtn" data-text="ENTER TOURNAMENT">
+                      <span className="btn-text">Enter Tournament</span>
+                    </button>
                   )}
                   {user.isAdmin && (
                     <>
-                      <button onClick={handleStart} disabled={tournament.participants.length < 2} style={{ ...primaryBtn, opacity: tournament.participants.length < 2 ? 0.5 : 1 }}>
-                        Start Tournament
+                      <button onClick={handleStart} disabled={tournament.participants.length < 2} className="gbtn" data-text="START TOURNAMENT" style={{ opacity: tournament.participants.length < 2 ? 0.5 : 1 }}>
+                        <span className="btn-text">Start Tournament</span>
                       </button>
                       <button onClick={handleCancel} style={dangerBtn}>Cancel Tournament</button>
                     </>
@@ -456,8 +458,8 @@ export default function Tournament() {
 
               {/* Podium */}
               {podium && (
-                <div style={{ background: '#0f2236', border: '1px solid #1e4976', borderRadius: 14, overflow: 'hidden' }}>
-                  <div style={{ padding: '12px 20px', borderBottom: '1px solid #1e4976', fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: '#4e7a9b' }}>
+                <div style={{ background: 'var(--panel)', border: '1px solid rgba(0,242,234,0.2)', boxShadow: '0 0 1.2rem rgba(0,242,234,0.06)', overflow: 'hidden' }}>
+                  <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--border)', fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: 'var(--sub)' }}>
                     Final Results
                   </div>
                   {[
@@ -465,13 +467,13 @@ export default function Tournament() {
                     { place: 2, player: podium.second, pts: rewardSpots >= 2 ? secondPoints : null },
                     ...(podium.third || []).map((p, i) => ({ place: 3 + i, player: p, pts: i === 0 && rewardSpots >= 3 ? thirdPoints : null })),
                   ].filter((r) => r.player).map((row) => (
-                    <div key={row.place} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 20px', borderBottom: '1px solid #0d1b2a' }}>
-                      <div style={{ width: 28, fontWeight: 800, fontSize: 15, color: MEDAL_COLORS[row.place - 1] ?? '#2e4a62', flexShrink: 0 }}>
+                    <div key={row.place} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 20px', borderBottom: '1px solid var(--bg)' }}>
+                      <div style={{ width: 28, fontWeight: 800, fontSize: 15, color: MEDAL_COLORS[row.place - 1] ?? 'var(--faint)', flexShrink: 0 }}>
                         {row.place}
                       </div>
                       <div style={{ flex: 1, fontWeight: 700, fontSize: 15 }}>{row.player.username}</div>
                       {row.pts && (
-                        <div style={{ fontSize: 13, fontWeight: 700, color: MEDAL_COLORS[row.place - 1] ?? '#4e7a9b' }}>+{row.pts} pts</div>
+                        <div style={{ fontSize: 13, fontWeight: 700, color: MEDAL_COLORS[row.place - 1] ?? 'var(--sub)' }}>+{row.pts} pts</div>
                       )}
                     </div>
                   ))}
@@ -480,16 +482,16 @@ export default function Tournament() {
 
               {/* ELO changes */}
               {eloList && (
-                <div style={{ background: '#0f2236', border: '1px solid #1e4976', borderRadius: 14, overflow: 'hidden' }}>
-                  <div style={{ padding: '12px 20px', borderBottom: '1px solid #1e4976', fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: '#4e7a9b' }}>
+                <div style={{ background: 'var(--panel)', border: '1px solid rgba(0,242,234,0.2)', boxShadow: '0 0 1.2rem rgba(0,242,234,0.06)', overflow: 'hidden' }}>
+                  <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--border)', fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: 'var(--sub)' }}>
                     ELO Changes
                   </div>
                   {eloList.map(({ player, eloChange }, i) => (
-                    <div key={player._id} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 20px', borderBottom: '1px solid #0d1b2a' }}>
-                      <div style={{ width: 28, fontSize: 13, color: '#4e7a9b', flexShrink: 0 }}>#{i + 1}</div>
+                    <div key={player._id} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 20px', borderBottom: '1px solid var(--bg)' }}>
+                      <div style={{ width: 28, fontSize: 13, color: 'var(--sub)', flexShrink: 0 }}>#{i + 1}</div>
                       <div style={{ flex: 1, fontSize: 14 }}>{player.username}</div>
-                      <div style={{ fontWeight: 700, fontSize: 14, color: eloChange > 0 ? '#3dcf8e' : eloChange < 0 ? '#f87171' : '#4e7a9b' }}>
-                        {eloChange > 0 ? `+${eloChange}` : eloChange === 0 ? 'Â±0' : eloChange}
+                      <div style={{ fontWeight: 700, fontSize: 14, color: eloChange > 0 ? 'var(--success)' : eloChange < 0 ? 'var(--danger)' : 'var(--sub)' }}>
+                        {eloChange > 0 ? `+${eloChange}` : eloChange === 0 ? '±0' : eloChange}
                       </div>
                     </div>
                   ))}
@@ -498,15 +500,15 @@ export default function Tournament() {
 
               {/* Round Robin standings */}
               {isRoundRobin && (
-                <div style={{ background: '#0f2236', border: '1px solid #1e4976', borderRadius: 14, overflow: 'hidden' }}>
-                  <div style={{ padding: '12px 20px', borderBottom: '1px solid #1e4976', fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: '#4e7a9b' }}>
+                <div style={{ background: 'var(--panel)', border: '1px solid rgba(0,242,234,0.2)', boxShadow: '0 0 1.2rem rgba(0,242,234,0.06)', overflow: 'hidden' }}>
+                  <div style={{ padding: '12px 20px', borderBottom: '1px solid var(--border)', fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: 'var(--sub)' }}>
                     Full Standings
                   </div>
                   {computeStandings().map((s, i) => (
-                    <div key={s.username} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 20px', borderBottom: '1px solid #0d1b2a' }}>
-                      <div style={{ width: 28, fontSize: 13, color: '#4e7a9b' }}>{i + 1}</div>
+                    <div key={s.username} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 20px', borderBottom: '1px solid var(--bg)' }}>
+                      <div style={{ width: 28, fontSize: 13, color: 'var(--sub)' }}>{i + 1}</div>
                       <div style={{ flex: 1, fontSize: 14 }}>{s.username}</div>
-                      <div style={{ fontSize: 13, color: '#4e7a9b' }}>{s.wins}W â€” {s.losses}L</div>
+                      <div style={{ fontSize: 13, color: 'var(--sub)' }}>{s.wins}W — {s.losses}L</div>
                     </div>
                   ))}
                 </div>
@@ -522,7 +524,7 @@ export default function Tournament() {
 
 function SectionTitle({ children }) {
   return (
-    <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: '#4e7a9b', marginBottom: 12 }}>
+    <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: 'var(--sub)', marginBottom: 12 }}>
       {children}
     </div>
   );
@@ -535,7 +537,7 @@ function BracketSection({ title, rounds, roundNumbers, renderMatch }) {
       <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'flex-start' }}>
         {roundNumbers.map((r) => (
           <div key={r} style={{ minWidth: 200 }}>
-            <div style={{ fontSize: 11, color: '#2e4a62', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Round {r}</div>
+            <div style={{ fontSize: 11, color: 'var(--faint)', fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 8 }}>Round {r}</div>
             {rounds[r].map(renderMatch)}
           </div>
         ))}
@@ -545,24 +547,18 @@ function BracketSection({ title, rounds, roundNumbers, renderMatch }) {
 }
 
 const ghostBtn = {
-  background: 'transparent', border: '1px solid #1e4976', borderRadius: 8,
-  color: '#5ba3d9', fontSize: 12, fontWeight: 700, letterSpacing: 1.5,
+  background: 'transparent', border: '1px solid var(--border)',
+  color: 'var(--cyan)', fontFamily: "'Fira Code', Consolas, monospace", fontSize: 12, fontWeight: 700, letterSpacing: 1.5,
   textTransform: 'uppercase', padding: '7px 14px', cursor: 'pointer',
 };
 
-const primaryBtn = {
-  background: '#0f2236', border: '1px solid #2e6da4', borderRadius: 8,
-  color: '#5ba3d9', fontSize: 13, fontWeight: 700, padding: '10px 20px', cursor: 'pointer',
-};
-
 const dangerBtn = {
-  background: '#2a0a14', border: '1px solid #8a1a2a', borderRadius: 8,
-  color: '#f87171', fontSize: 13, fontWeight: 700, padding: '10px 20px', cursor: 'pointer',
+  background: 'transparent', border: '2px solid var(--danger)',
+  color: 'var(--danger)', fontFamily: "'Fira Code', Consolas, monospace", fontSize: 12, fontWeight: 700,
+  letterSpacing: '0.08em', textTransform: 'uppercase', padding: '10px 20px', cursor: 'pointer',
 };
 
 const reportBtn = {
-  background: '#112233', border: '1px solid #1e4976', borderRadius: 6,
-  color: '#e8f1fa', fontSize: 11, padding: '4px 8px', cursor: 'pointer',
+  background: 'var(--panel2)', border: '1px solid var(--border)',
+  color: 'var(--text)', fontFamily: "'Fira Code', Consolas, monospace", fontSize: 11, padding: '4px 8px', cursor: 'pointer',
 };
-
-

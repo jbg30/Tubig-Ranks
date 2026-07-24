@@ -1,4 +1,4 @@
-﻿import API from '../api.js';
+import API from '../api.js';
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
@@ -54,12 +54,12 @@ export default function Profile() {
   };
 
   if (loading) return (
-    <div style={{ minHeight: '100vh', background: '#0d1b2a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4e7a9b', fontFamily: 'sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--sub)', fontFamily: "'Fira Code', Consolas, monospace" }}>
       Loading...
     </div>
   );
   if (!profileUser) return (
-    <div style={{ minHeight: '100vh', background: '#0d1b2a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#4e7a9b', fontFamily: 'sans-serif' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--sub)', fontFamily: "'Fira Code', Consolas, monospace" }}>
       Player not found.
     </div>
   );
@@ -73,9 +73,9 @@ export default function Profile() {
       <TopNav />
       <div style={{
         minHeight: '100vh',
-        background: '#0d1b2a',
-        color: '#e8f1fa',
-        fontFamily: 'sans-serif',
+        background: 'var(--bg)',
+        color: 'var(--text)',
+        fontFamily: "'Fira Code', Consolas, monospace",
         paddingTop: 80,
         paddingBottom: 60,
       }}>
@@ -83,13 +83,13 @@ export default function Profile() {
 
           {/* Player card */}
           <div style={{
-            background: '#0f2236',
-            border: '1px solid #1e4976',
-            borderRadius: 14,
+            background: 'var(--panel)',
+            border: '1px solid rgba(0,242,234,0.2)',
+            boxShadow: '0 0 1.2rem rgba(0,242,234,0.06)',
             overflow: 'hidden',
           }}>
             <div style={{
-              background: '#112233',
+              background: 'linear-gradient(45deg, rgba(0,242,234,0.08), rgba(13,13,13,0.8)), radial-gradient(circle, rgba(168,85,247,0.06) 0%, transparent 70%)',
               padding: '32px 24px 24px',
               display: 'flex',
               flexDirection: 'column',
@@ -117,8 +117,8 @@ export default function Profile() {
               <div style={{ color: rank.color, fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', marginTop: 4 }}>
                 {profileUser.isPlaced ? rank.name : 'Unranked'}
               </div>
-              <div className="pc-username" style={{ fontSize: 30 }}>
-                {profileUser.username}{isOwnProfile ? <span style={{ color: '#4e7a9b', fontSize: 14, fontWeight: 400, marginLeft: 8 }}>you</span> : ''}
+              <div className="pc-username glitch" data-text={profileUser.username} style={{ fontSize: 28 }}>
+                {profileUser.username}{isOwnProfile ? <span style={{ color: 'var(--sub)', fontSize: 14, fontWeight: 400, marginLeft: 8 }}>you</span> : ''}
               </div>
               <div className="pc-elo">
                 {profileUser.isPlaced
@@ -129,16 +129,16 @@ export default function Profile() {
 
             {/* Stats row */}
             {stats && (
-              <div style={{ display: 'flex', borderTop: '1px solid #1e4976' }}>
+              <div style={{ display: 'flex', borderTop: '1px solid var(--border)' }}>
                 {[
-                  { label: 'Wins', value: stats.wins, color: '#3dcf8e' },
-                  { label: 'Losses', value: stats.losses, color: '#f87171' },
-                  { label: 'Win Rate', value: `${winRate}%`, color: winRate >= 50 ? '#3dcf8e' : '#f87171' },
-                  { label: 'Games', value: stats.totalGames, color: '#e8f1fa' },
+                  { label: 'Wins', value: stats.wins, color: 'var(--success)' },
+                  { label: 'Losses', value: stats.losses, color: 'var(--danger)' },
+                  { label: 'Win Rate', value: `${winRate}%`, color: winRate >= 50 ? 'var(--success)' : 'var(--danger)' },
+                  { label: 'Games', value: stats.totalGames, color: 'var(--text)' },
                 ].map((s) => (
-                  <div key={s.label} style={{ flex: 1, padding: '14px 0', textAlign: 'center', borderRight: '1px solid #1e4976' }}>
+                  <div key={s.label} style={{ flex: 1, padding: '14px 0', textAlign: 'center', borderRight: '1px solid var(--border)' }}>
                     <div style={{ fontSize: 20, fontWeight: 800, color: s.color }}>{s.value}</div>
-                    <div style={{ fontSize: 11, color: '#4e7a9b', letterSpacing: 1, textTransform: 'uppercase', marginTop: 2 }}>{s.label}</div>
+                    <div style={{ fontSize: 11, color: 'var(--sub)', letterSpacing: 1, textTransform: 'uppercase', marginTop: 2 }}>{s.label}</div>
                   </div>
                 ))}
               </div>
@@ -147,16 +147,16 @@ export default function Profile() {
 
           {/* Match history */}
           <div style={{
-            background: '#0f2236',
-            border: '1px solid #1e4976',
-            borderRadius: 14,
+            background: 'var(--panel)',
+            border: '1px solid rgba(0,242,234,0.2)',
+            boxShadow: '0 0 1.2rem rgba(0,242,234,0.06)',
             overflow: 'hidden',
           }}>
-            <div style={{ padding: '14px 20px', borderBottom: '1px solid #1e4976', fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: '#4e7a9b' }}>
+            <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', fontSize: 12, fontWeight: 700, letterSpacing: 2, textTransform: 'uppercase', color: 'var(--sub)' }}>
               Recent Matches
             </div>
             {history.length === 0 ? (
-              <div style={{ padding: '24px', textAlign: 'center', color: '#2e4a62', fontSize: 13 }}>No matches played yet.</div>
+              <div style={{ padding: '24px', textAlign: 'center', color: 'var(--faint)', fontSize: 13 }}>No matches played yet.</div>
             ) : (
               history.map((match) => {
                 const playerEntry = match.players.find((p) => p.userId?._id === userId);
@@ -171,7 +171,7 @@ export default function Profile() {
                     display: 'flex',
                     alignItems: 'center',
                     padding: '12px 20px',
-                    borderBottom: '1px solid #0d1b2a',
+                    borderBottom: '1px solid var(--bg)',
                     gap: 14,
                   }}>
                     {/* Result pill */}
@@ -182,21 +182,21 @@ export default function Profile() {
                       fontSize: 12,
                       letterSpacing: 1,
                       textTransform: 'uppercase',
-                      color: completed ? (won ? '#3dcf8e' : '#f87171') : '#4e7a9b',
+                      color: completed ? (won ? 'var(--success)' : 'var(--danger)') : 'var(--sub)',
                       flexShrink: 0,
                     }}>
                       {completed ? (won ? 'Win' : 'Loss') : match.status}
                     </div>
 
                     {/* Teams */}
-                    <div style={{ flex: 1, fontSize: 13, color: '#a3c4e0' }}>
-                      {teamA.join(' & ')} <span style={{ color: '#2e4a62' }}>vs</span> {teamB.join(' & ')}
+                    <div style={{ flex: 1, fontSize: 13, color: 'var(--text)' }}>
+                      {teamA.join(' & ')} <span style={{ color: 'var(--faint)' }}>vs</span> {teamB.join(' & ')}
                     </div>
 
                     {/* Mode + date */}
                     <div style={{ textAlign: 'right', flexShrink: 0 }}>
-                      <div style={{ fontSize: 12, color: '#4e7a9b', textTransform: 'uppercase', letterSpacing: 1 }}>{match.mode}</div>
-                      <div style={{ fontSize: 11, color: '#2e4a62', marginTop: 2 }}>{new Date(match.createdAt).toLocaleDateString()}</div>
+                      <div style={{ fontSize: 12, color: 'var(--sub)', textTransform: 'uppercase', letterSpacing: 1 }}>{match.mode}</div>
+                      <div style={{ fontSize: 11, color: 'var(--faint)', marginTop: 2 }}>{new Date(match.createdAt).toLocaleDateString()}</div>
                     </div>
 
                     {/* ELO change */}
@@ -206,7 +206,7 @@ export default function Profile() {
                         textAlign: 'right',
                         fontWeight: 700,
                         fontSize: 13,
-                        color: eloChange >= 0 ? '#3dcf8e' : '#f87171',
+                        color: eloChange >= 0 ? 'var(--success)' : 'var(--danger)',
                         flexShrink: 0,
                       }}>
                         {eloChange >= 0 ? '+' : ''}{eloChange}
@@ -223,4 +223,3 @@ export default function Profile() {
     </>
   );
 }
-

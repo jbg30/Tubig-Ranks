@@ -1,7 +1,9 @@
-﻿import API from '../api.js';
+import API from '../api.js';
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
+import tubigLogo from '../assets/Tubig Logo.png';
+import './Register.css';
 
 export default function Register() {
   const [username, setUsername] = useState('');
@@ -46,100 +48,51 @@ export default function Register() {
     }
   };
 
-  const inputStyle = {
-    padding: '10px 14px',
-    width: '100%',
-    marginBottom: 12,
-    boxSizing: 'border-box',
-    background: '#132333',
-    border: '1px solid #2e6da4',
-    borderRadius: 8,
-    color: '#e8f1fa',
-    fontSize: 14,
-    outline: 'none',
-  };
-
   return (
-    <div style={{
-      minHeight: '100vh',
-      background: '#0d1b2a',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontFamily: 'sans-serif',
-    }}>
-      <div style={{
-        background: '#112233',
-        border: '1px solid #1e4976',
-        borderRadius: 12,
-        padding: '2.5rem 2rem',
-        width: '100%',
-        maxWidth: 360,
-        textAlign: 'center',
-      }}>
-        <div
-          onClick={() => navigate('/')}
-          style={{ cursor: 'pointer', marginBottom: '1.5rem' }}
-        >
-          <h1 style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: 36,
-            fontWeight: 400,
-            color: '#e8f1fa',
-            letterSpacing: 4,
-            margin: 0,
-          }}>
-            Tubig Ranks
-          </h1>
+    <div className="auth-page">
+      <div className="auth-card gcard">
+        <div className="gcard-head" />
+        <div className="auth-avatar">
+          <img src={tubigLogo} alt="Tubig Ranks" />
         </div>
+        <div className="auth-body">
+          <h1 className="auth-brand glitch" data-text="TUBIGRANKS" onClick={() => navigate('/')}>
+            TUBIGRANKS
+          </h1>
+          <p className="auth-sub">Create an account</p>
 
-        <h2 style={{ color: '#e8f1fa', fontSize: 18, fontWeight: 500, margin: '0 0 1.5rem' }}>
-          Create an account
-        </h2>
+          <form className="auth-form" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="auth-input"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="auth-input"
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              className="gbtn auth-submit"
+              data-text={loading ? 'CREATING...' : 'REGISTER'}
+            >
+              <span className="btn-text">{loading ? 'Creating account...' : 'Register'}</span>
+            </button>
+          </form>
 
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            style={inputStyle}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            style={inputStyle}
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            style={{
-              padding: '11px 0',
-              width: '100%',
-              background: '#2e6da4',
-              border: 'none',
-              borderRadius: 8,
-              color: '#e8f1fa',
-              fontSize: 15,
-              fontWeight: 500,
-              cursor: loading ? 'not-allowed' : 'pointer',
-              opacity: loading ? 0.7 : 1,
-            }}
-          >
-            {loading ? 'Creating account...' : 'Register'}
-          </button>
-        </form>
+          {error && <p className="auth-error">{error}</p>}
 
-        {error && <p style={{ color: '#f87171', marginTop: 12, fontSize: 13 }}>{error}</p>}
-
-        <p style={{ marginTop: 20, fontSize: 13, color: '#4e7a9b' }}>
-          Already have an account?{' '}
-          <Link to="/login" style={{ color: '#5ba3d9', textDecoration: 'none' }}>Log in</Link>
-        </p>
+          <p className="auth-footer">
+            Already have an account? <Link to="/login">Log in</Link>
+          </p>
+        </div>
       </div>
     </div>
   );
 }
-

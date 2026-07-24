@@ -1,7 +1,8 @@
-﻿import API from '../api.js';
+import API from '../api.js';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopNav from '../components/TopNav';
+import '../glitch-theme.css';
 
 const formatFormat = (f) => {
   if (f === 'single-elimination') return 'Single Elim';
@@ -18,10 +19,10 @@ const formatStatus = (s) => {
 };
 
 const statusColor = (s) => {
-  if (s === 'registration') return '#dab640';
-  if (s === 'active') return '#3dcf8e';
-  if (s === 'completed') return '#4e7a9b';
-  return '#4e7a9b';
+  if (s === 'registration') return 'var(--warning)';
+  if (s === 'active') return 'var(--success)';
+  if (s === 'completed') return 'var(--sub)';
+  return 'var(--sub)';
 };
 
 export default function TournamentHistory() {
@@ -50,20 +51,21 @@ export default function TournamentHistory() {
       <TopNav />
       <div style={{
         minHeight: '100vh',
-        background: '#0d1b2a',
-        color: '#e8f1fa',
-        fontFamily: 'sans-serif',
+        background: 'var(--bg)',
+        color: 'var(--text)',
+        fontFamily: "'Fira Code', Consolas, monospace",
         paddingTop: 80,
         paddingBottom: 60,
       }}>
         <div style={{ maxWidth: 660, margin: '0 auto', padding: '0 24px' }}>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 28 }}>
-            <h1 style={{
-              fontFamily: "'Bebas Neue', sans-serif",
-              fontSize: 38,
-              letterSpacing: 4,
-              color: '#e8f1fa',
+            <h1 className="glitch" data-text="TOURNAMENTS" style={{
+              fontSize: 32,
+              fontWeight: 700,
+              letterSpacing: 3,
+              textTransform: 'uppercase',
+              color: 'var(--text)',
               margin: 0,
             }}>
               Tournaments
@@ -72,9 +74,9 @@ export default function TournamentHistory() {
               onClick={() => navigate('/tournament-leaderboard')}
               style={{
                 background: 'transparent',
-                border: '1px solid #1e4976',
-                borderRadius: 8,
-                color: '#5ba3d9',
+                border: '1px solid var(--border)',
+                color: 'var(--cyan)',
+                fontFamily: 'inherit',
                 fontSize: 12,
                 fontWeight: 700,
                 letterSpacing: 1.5,
@@ -83,19 +85,19 @@ export default function TournamentHistory() {
                 cursor: 'pointer',
                 transition: 'color 0.15s, border-color 0.15s',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = '#e8f1fa'; e.currentTarget.style.borderColor = '#5ba3d9'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = '#5ba3d9'; e.currentTarget.style.borderColor = '#1e4976'; }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--border-strong)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border)'; }}
             >
               Leaderboard
             </button>
           </div>
 
-          {error && <p style={{ color: '#f87171', fontSize: 13, marginBottom: 12 }}>{error}</p>}
+          {error && <p style={{ color: 'var(--danger)', fontSize: 13, marginBottom: 12 }}>{error}</p>}
 
           {loading ? (
-            <div style={{ textAlign: 'center', color: '#4e7a9b', marginTop: 60 }}>Loading...</div>
+            <div style={{ textAlign: 'center', color: 'var(--sub)', marginTop: 60 }}>Loading...</div>
           ) : tournaments.length === 0 ? (
-            <div style={{ textAlign: 'center', color: '#2e4a62', marginTop: 60, fontSize: 14 }}>No tournaments hosted yet.</div>
+            <div style={{ textAlign: 'center', color: 'var(--faint)', marginTop: 60, fontSize: 14 }}>No tournaments hosted yet.</div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {tournaments.map((t) => (
@@ -103,24 +105,23 @@ export default function TournamentHistory() {
                   key={t._id}
                   onClick={() => navigate(`/tournament/${t._id}`)}
                   style={{
-                    background: '#0f2236',
-                    border: '1px solid #1e4976',
+                    background: 'var(--panel)',
+                    border: '1px solid var(--border)',
                     borderLeft: `4px solid ${statusColor(t.status)}`,
-                    borderRadius: 12,
                     padding: '16px 20px',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     gap: 16,
-                    transition: 'background 0.15s',
+                    transition: 'border-color 0.15s',
                   }}
-                  onMouseEnter={(e) => e.currentTarget.style.background = '#112233'}
-                  onMouseLeave={(e) => e.currentTarget.style.background = '#0f2236'}
+                  onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--border-strong)'}
+                  onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border)'}
                 >
                   {/* Name + meta */}
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 4 }}>{t.name}</div>
-                    <div style={{ fontSize: 12, color: '#4e7a9b', display: 'flex', gap: 12 }}>
+                    <div style={{ fontSize: 12, color: 'var(--sub)', display: 'flex', gap: 12 }}>
                       <span>{formatFormat(t.format)}</span>
                       <span>{t.participants.length} player{t.participants.length !== 1 ? 's' : ''}</span>
                       <span>{new Date(t.createdAt).toLocaleDateString()}</span>
@@ -139,7 +140,7 @@ export default function TournamentHistory() {
                     {formatStatus(t.status)}
                   </div>
 
-                  <span style={{ color: '#2e4a62', fontSize: 18 }}>â€º</span>
+                  <span style={{ color: 'var(--faint)', fontSize: 18 }}>›</span>
                 </div>
               ))}
             </div>
@@ -149,5 +150,3 @@ export default function TournamentHistory() {
     </>
   );
 }
-
-

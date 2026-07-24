@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { RANKS } from '../utils/ranks';
 import TopNav from '../components/TopNav';
+import '../glitch-theme.css';
 import diamondIcon from '../assets/Diamond rank.png';
 import rubyIcon from '../assets/Ruby rank.png';
 import emeraldIcon from '../assets/Emerald rank.png';
@@ -19,21 +20,23 @@ export default function Ranks() {
       <TopNav />
       <div style={{
         minHeight: '100vh',
-        background: '#0d1b2a',
-        color: '#e8f1fa',
-        fontFamily: 'sans-serif',
+        background: 'var(--bg)',
+        color: 'var(--text)',
+        fontFamily: "'Fira Code', Consolas, monospace",
         paddingTop: 80,
         paddingBottom: 60,
       }}>
         <div style={{ maxWidth: 680, margin: '0 auto', padding: '0 24px' }}>
 
-          <h1 style={{
-            fontFamily: "'Bebas Neue', sans-serif",
-            fontSize: 42,
-            letterSpacing: 4,
-            color: '#e8f1fa',
-            margin: '0 0 4px',
+          <h1 className="glitch" data-text="RANK TIERS" style={{
+            fontSize: 36,
+            fontWeight: 700,
+            letterSpacing: 3,
+            textTransform: 'uppercase',
+            color: 'var(--text)',
+            margin: '0 0 20px',
             textAlign: 'center',
+            justifyContent: 'center',
           }}>
             Rank Tiers
           </h1>
@@ -43,10 +46,9 @@ export default function Ranks() {
               const isTop = i === 0;
               return (
                 <div key={rank.name} style={{
-                  background: '#0f2236',
-                  border: `1px solid ${isTop ? rank.color : '#1e4976'}`,
+                  background: 'var(--panel)',
+                  border: `1px solid ${isTop ? rank.color : 'var(--border)'}`,
                   borderLeft: `4px solid ${rank.color}`,
-                  borderRadius: 12,
                   padding: '12px 18px',
                   display: 'flex',
                   alignItems: 'center',
@@ -113,10 +115,10 @@ export default function Ranks() {
                     textAlign: 'right',
                     flexShrink: 0,
                   }}>
-                    <div style={{ fontSize: 15, fontWeight: 700, color: '#e8f1fa' }}>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)' }}>
                       {rank.min.toLocaleString()}{rank.max === Infinity ? '+' : ` – ${rank.max.toLocaleString()}`}
                     </div>
-                    <div style={{ fontSize: 11, color: '#4e7a9b', letterSpacing: 1, textTransform: 'uppercase' }}>
+                    <div style={{ fontSize: 11, color: 'var(--sub)', letterSpacing: 1, textTransform: 'uppercase' }}>
                       ELO
                     </div>
                   </div>

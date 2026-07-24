@@ -1,0 +1,116 @@
+@import '../glitch-theme.css';
+
+.auth-page {
+  min-height: 100vh;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fira Code', Consolas, 'Courier New', Courier, monospace;
+  color: var(--text);
+  padding: 1rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 22rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-avatar {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0.9rem;
+  z-index: 2;
+  width: 4.5rem;
+  height: 4.5rem;
+  background: var(--panel);
+  border-radius: 50%;
+  padding: 0.7rem;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(0, 242, 234, 0.3);
+}
+
+.auth-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 8px rgba(0, 242, 234, 0.35));
+}
+
+.auth-body {
+  padding: 1.4rem 1.6rem 1.6rem;
+  padding-top: 2.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.auth-brand {
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  margin: 0;
+  cursor: pointer;
+}
+
+.auth-sub {
+  font-size: 0.7rem;
+  color: var(--sub);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0.4rem 0 1.6rem;
+}
+
+.auth-form { width: 100%; }
+
+.auth-input {
+  width: 100%;
+  padding: 0.7em 0.9em;
+  margin-bottom: 0.7rem;
+  box-sizing: border-box;
+  background: var(--panel2);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.auth-input:focus { border-color: var(--border-strong); }
+.auth-input::placeholder { color: var(--sub); }
+
+.auth-submit {
+  display: block;
+  width: 100%;
+  margin-top: 0.4rem;
+}
+
+.auth-error {
+  color: var(--danger);
+  margin-top: 0.8rem;
+  font-size: 12px;
+}
+
+.auth-footer {
+  margin-top: 1.2rem;
+  font-size: 12px;
+  color: var(--sub);
+}
+
+.auth-footer a { color: var(--cyan); text-decoration: none; }
+.auth-footer a:hover { text-decoration: underline; }
+
+.auth-footer-sub {
+  margin-top: 0.5rem;
+  font-size: 11px;
+}
+
+.auth-footer-sub a { color: var(--faint); text-decoration: none; }
+.auth-footer-sub a:hover { color: var(--sub); }
