@@ -11,12 +11,12 @@ const MODE_SIZES = {
 };
 
 const BASE_RANGE = 50;
-const RANGE_PER_10_SEC = 50;
+const RANGE_PER_5_SEC = 50;
 
 const getCurrentRange = (joinedAt) => {
   const secondsWaited = (Date.now() - joinedAt) / 1000;
-  const widenSteps = Math.floor(secondsWaited / 10);
-  return BASE_RANGE + widenSteps * RANGE_PER_10_SEC;
+  const widenSteps = Math.floor(secondsWaited / 5);
+  return BASE_RANGE + widenSteps * RANGE_PER_5_SEC;
 };
 
 const findMatchGroup = (playersForMode, neededCount) => {

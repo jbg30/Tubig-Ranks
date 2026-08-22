@@ -42,7 +42,7 @@ export default function Match() {
 
   useEffect(() => {
     fetchMatch();
-    pollRef.current = setInterval(checkMatchStatus, 2000);
+    pollRef.current = setInterval(checkMatchStatus, 1000);
     return () => clearInterval(pollRef.current);
   }, [id]);
 

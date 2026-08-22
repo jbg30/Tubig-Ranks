@@ -7,6 +7,7 @@ import './Register.css';
 
 export default function Register() {
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,8 +19,8 @@ export default function Register() {
     e.preventDefault();
     setError('');
 
-    if (!username.trim() || !password) {
-      setError('Username and password are required');
+    if (!username.trim() || !password || !email.trim()) {
+      setError('Username, email, and password are required');
       return;
     }
 
@@ -29,7 +30,7 @@ export default function Register() {
       const res = await fetch(`${API}/api/users/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username: username.trim(), password }),
+        body: JSON.stringify({ username: username.trim(), email: email.trim(), password }),
       });
 
       const data = await res.json();
@@ -67,6 +68,13 @@ export default function Register() {
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              className="auth-input"
+            />
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="auth-input"
             />
             <input

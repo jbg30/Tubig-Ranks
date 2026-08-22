@@ -57,7 +57,7 @@ export default function Lobby() {
       fetchPendingRequests();
       fetchParty();
       fetchTournament();
-    }, 5000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, []);
@@ -79,7 +79,7 @@ export default function Lobby() {
     } catch (err) {
       // ignore
     }
-  }, 2000);
+  }, 1000);
 
   return () => clearInterval(interval);
 }, [party]);

@@ -11,6 +11,33 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+    unique: true,
+    sparse: true, // allows multiple docs with no email while still enforcing uniqueness when present
+    trim: true,
+    lowercase: true,
+  },
+  emailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  emailVerifyTokenHash: {
+    type: String,
+    default: null,
+  },
+  emailVerifyExpires: {
+    type: Date,
+    default: null,
+  },
+  passwordResetTokenHash: {
+    type: String,
+    default: null,
+  },
+  passwordResetExpires: {
+    type: Date,
+    default: null,
+  },
   mmr: {
     type: Number,
     default: 1000, // Default MMR value for new users

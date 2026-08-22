@@ -63,7 +63,7 @@ export function UserProvider({ children }) {
       const res = await fetch(`${API}/api/users/${user._id}`);
       const data = await res.json();
       if (res.ok) {
-        const updated = { ...data, token: user.token };
+        const updated = { ...data, token: user.token, needsEmailLink: !data.email };
         localStorage.setItem('matchmaking_user', JSON.stringify(updated));
         setUser(updated);
       }

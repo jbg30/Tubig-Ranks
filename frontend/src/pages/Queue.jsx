@@ -33,12 +33,12 @@ export default function Queue() {
       const body = partyId ? { partyId, userId: user._id } : { userId: user._id, mode };
       const res = await authFetch(url, { method: 'POST', body: JSON.stringify(body) });
       const data = await res.json();
-      if (res.status === 409) { setStatus('waiting'); pollRef.current = setInterval(checkQueue, 2000); return; }
+      if (res.status === 409) { setStatus('waiting'); pollRef.current = setInterval(checkQueue, 750); return; }
       if (!res.ok) { setError(data.error || 'Could not join queue'); setStatus('error'); return; }
       if (data.status === 'matched') { navigate(`/match/${data.match._id}`); return; }
       setStatus('waiting');
       setQueueInfo(data);
-      pollRef.current = setInterval(checkQueue, 2000);
+      pollRef.current = setInterval(checkQueue, 750);
     } catch { setError('Could not reach the server'); setStatus('error'); }
   };
 

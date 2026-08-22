@@ -1,11 +1,11 @@
-import API from '../api.js';
+import API, { authFetch } from '../api.js';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useUser } from '../context/UserContext';
 import tubigLogo from '../assets/Tubig Logo.png';
 import './Register.css';
 
-export default function ForgotPassword() {
-  const navigate = useNavigate();
+export default function LinkEmail() {
+  const { user, refreshUser, logoutUser } = useUser();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [sent, setSent] = useState(false);
@@ -22,10 +22,9 @@ export default function ForgotPassword() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API}/api/users/forgot-password`, {
+      const res = await authFetch(`${API}/api/users/link-email`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.trim() }),
+        body: JSON.stringify({ userId: user._id, email: email.trim() }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -33,6 +32,7 @@ export default function ForgotPassword() {
         setLoading(false);
         return;
       }
+      await refreshUser();
       setSent(true);
     } catch (err) {
       setError('Could not reach the server');
@@ -48,20 +48,21 @@ export default function ForgotPassword() {
           <img src={tubigLogo} alt="Tubig Ranks" />
         </div>
         <div className="auth-body">
-          <h1 className="auth-brand glitch" data-text="TUBIGRANKS" onClick={() => navigate('/')}>
+          <h1 className="auth-brand glitch" data-text="TUBIGRANKS">
             TUBIGRANKS
           </h1>
-          <p className="auth-sub">Forgot credentials?</p>
+          <p className="auth-sub">Secure your account</p>
 
           {sent ? (
             <p style={{ color: 'var(--sub)', fontSize: 13, lineHeight: 1.6 }}>
-              If an account with that email exists, a password reset link has been sent.
+              Check <strong>{email.trim()}</strong> for a verification link. Once verified you'll
+              be able to use it for password resets.
             </p>
           ) : (
             <>
               <p style={{ color: 'var(--sub)', fontSize: 13, lineHeight: 1.6, margin: '0 0 1.2rem' }}>
-                Enter the email linked to your account. If accounts don't have an email linked yet,
-                reach out to a server admin instead.
+                Your account doesn't have an email linked yet. Add one now so you can recover your
+                account without needing an admin.
               </p>
               <form className="auth-form" onSubmit={handleSubmit}>
                 <input
@@ -75,18 +76,18 @@ export default function ForgotPassword() {
                   type="submit"
                   disabled={loading}
                   className="gbtn auth-submit"
-                  data-text={loading ? 'SENDING...' : 'SEND RESET LINK'}
+                  data-text={loading ? 'LINKING...' : 'LINK EMAIL'}
                 >
-                  <span className="btn-text">{loading ? 'Sending...' : 'Send reset link'}</span>
+                  <span className="btn-text">{loading ? 'Linking...' : 'Link email'}</span>
                 </button>
               </form>
               {error && <p className="auth-error">{error}</p>}
             </>
           )}
 
-          <button onClick={() => navigate('/login')} className="gbtn auth-submit" data-text="BACK TO LOGIN">
-            <span className="btn-text">Back to login</span>
-          </button>
+          <p className="auth-footer-sub">
+            <span onClick={logoutUser} style={{ cursor: 'pointer' }}>Log out</span>
+          </p>
         </div>
       </div>
     </div>

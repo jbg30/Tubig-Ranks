@@ -13,6 +13,9 @@ import Tournament from './pages/Tournament';
 import TournamentHistory from './pages/TournamentHistory';
 import TournamentLeaderboard from './pages/TournamentLeaderboard';
 import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import VerifyEmail from './pages/VerifyEmail';
+import LinkEmail from './pages/LinkEmail';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -33,6 +36,9 @@ function App() {
       <Route path="/tournaments" element={<ProtectedRoute><TournamentHistory /></ProtectedRoute>} />
       <Route path="/tournament-leaderboard" element={<ProtectedRoute><TournamentLeaderboard /></ProtectedRoute>} />
       <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/verify-email" element={<VerifyEmail />} />
+      <Route path="/link-email" element={<ProtectedRoute><LinkEmail /></ProtectedRoute>} />
     </Routes>
   );
 }

@@ -22,7 +22,7 @@ export default function Tournament() {
   useEffect(() => {
     setLoading(true);
     fetchTournament();
-    pollRef.current = setInterval(fetchTournament, 3000);
+    pollRef.current = setInterval(fetchTournament, 1500);
     return () => clearInterval(pollRef.current);
   }, [id]);
 

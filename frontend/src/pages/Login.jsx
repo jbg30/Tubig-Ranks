@@ -41,7 +41,7 @@ export default function Login() {
       }
 
       loginUser(data);
-      navigate('/lobby');
+      navigate(data.needsEmailLink ? '/link-email' : '/lobby');
     } catch (err) {
       setError('Could not reach the server');
       setLoading(false);
