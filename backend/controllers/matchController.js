@@ -104,7 +104,7 @@ export const reportResult = async (req, res) => {
         if (entry) entry.eloChange = updateData.lastMatchEloChange ?? 0;
 
       } else {
-        const kFactor = getKFactor(playerMmr);
+        const kFactor = getKFactor(playerMmr, didWin);
         const eloChange = calculateEloChange(playerMmr, opponentAvgMmr, didWin, kFactor);
         const rankBefore = getRankName(playerMmr);
         const rankAfter = getRankName(playerMmr + eloChange);
