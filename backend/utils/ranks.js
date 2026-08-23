@@ -1,5 +1,5 @@
 export const RANKS = [
-  { name: 'Unranked', min: -Infinity, max: -1, winKFactor: 80, loseKFactor: 80 },
+  { name: 'Unranked', min: -Infinity, max: -1, winKFactor: 80, loseKFactor: 60 },
   { name: 'Coal', min: 0, max: 999, winKFactor: 50, loseKFactor: 25 },
   { name: 'Bronze', min: 1000, max: 1099, winKFactor: 50, loseKFactor: 35 },
   { name: 'Silver', min: 1100, max: 1199, winKFactor: 45, loseKFactor: 35 },
