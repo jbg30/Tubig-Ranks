@@ -10,7 +10,7 @@ const MODE_SIZES = {
   '1v1': 2,
 };
 
-const BASE_RANGE = 50;
+const BASE_RANGE = 100;
 const RANGE_PER_5_SEC = 50;
 
 const getCurrentRange = (joinedAt) => {

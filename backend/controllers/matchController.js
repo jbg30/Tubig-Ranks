@@ -66,7 +66,7 @@ export const reportResult = async (req, res) => {
       const playerMmr = user.mmr;
 
       if (!user.isPlaced) {
-        const eloChange = calculateEloChange(playerMmr, opponentAvgMmr, didWin, 80);
+        const eloChange = calculateEloChange(playerMmr, opponentAvgMmr, didWin, didWin ? 60 : 10);
         const newMmr = Math.max(900, playerMmr + eloChange);
 
         const newGamesPlayed = user.placementGamesPlayed + 1;
