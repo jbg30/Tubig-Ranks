@@ -27,6 +27,10 @@ winningTeam: {
   enum: ['A', 'B', null],
   default: null,
 },
+resolving: {
+  type: Boolean,
+  default: false,
+},
 players: [{
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   team: { type: String, enum: ['A', 'B'] },

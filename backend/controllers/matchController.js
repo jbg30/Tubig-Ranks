@@ -12,31 +12,53 @@ export const reportResult = async (req, res) => {
       return res.status(400).json({ error: 'userId and winningTeam are required' });
     }
 
-    const match = await Match.findById(req.params.id).populate('players.userId');
+    const initialMatch = await Match.findById(req.params.id);
 
-    if (!match) {
+    if (!initialMatch) {
       return res.status(404).json({ error: 'Match not found' });
     }
 
-    if (match.status !== 'active') {
-      return res.status(400).json({ error: `Match is already ${match.status}` });
+    if (initialMatch.status !== 'active') {
+      return res.status(400).json({ error: `Match is already ${initialMatch.status}` });
     }
 
-    const isPlayerInMatch = match.players.some((p) => p.userId._id.toString() === userId);
+    const isPlayerInMatch = initialMatch.players.some((p) => p.userId.toString() === userId);
     if (!isPlayerInMatch) {
       return res.status(403).json({ error: 'You are not part of this match' });
     }
 
-    const alreadyReported = match.reports.find((r) => r.reportedBy.toString() === userId);
-    if (alreadyReported) {
-      return res.status(409).json({ error: 'You already reported a result for this match' });
+    // Atomic push guards against two simultaneous reports racing on a read-modify-save
+    // and silently overwriting each other.
+    const afterPush = await Match.findOneAndUpdate(
+      { _id: req.params.id, status: 'active', 'reports.reportedBy': { $ne: userId } },
+      { $push: { reports: { reportedBy: userId, winningTeam } } },
+      { new: true }
+    );
+
+    if (!afterPush) {
+      const current = await Match.findById(req.params.id);
+      const alreadyReported = current?.reports.some((r) => r.reportedBy.toString() === userId);
+      if (alreadyReported) {
+        return res.status(409).json({ error: 'You already reported a result for this match' });
+      }
+      return res.status(200).json({ status: current?.status || 'unknown' });
     }
 
-    match.reports.push({ reportedBy: userId, winningTeam });
-    await match.save();
+    if (afterPush.reports.length < 2) {
+      return res.status(200).json({ status: 'pending', reportsNeeded: 2 - afterPush.reports.length });
+    }
 
-    if (match.reports.length < 2) {
-      return res.status(200).json({ status: 'pending', reportsNeeded: 2 - match.reports.length });
+    // Atomic claim prevents two concurrent requests from both resolving the match
+    // and applying elo changes twice.
+    const match = await Match.findOneAndUpdate(
+      { _id: req.params.id, status: 'active', resolving: { $ne: true } },
+      { $set: { resolving: true } },
+      { new: true }
+    ).populate('players.userId');
+
+    if (!match) {
+      const current = await Match.findById(req.params.id);
+      return res.status(200).json({ status: current?.status || 'unknown', winningTeam: current?.winningTeam ?? null });
     }
 
     const [firstReport, secondReport] = match.reports;

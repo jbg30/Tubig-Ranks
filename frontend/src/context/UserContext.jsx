@@ -16,6 +16,18 @@ export function UserProvider({ children }) {
       socket.emit('register', parsedUser._id);
     }
     setLoading(false);
+
+    // Mobile browsers drop the socket when backgrounded (screen lock, app switch);
+    // when it silently reconnects it's a new connection the server doesn't know
+    // is tied to this user, so re-register on every (re)connect, not just mount.
+    const handleConnect = () => {
+      const current = localStorage.getItem('matchmaking_user');
+      if (current) {
+        socket.emit('register', JSON.parse(current)._id);
+      }
+    };
+    socket.on('connect', handleConnect);
+    return () => socket.off('connect', handleConnect);
   }, []);
 
   useEffect(() => {

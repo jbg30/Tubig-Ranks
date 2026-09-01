@@ -2,7 +2,10 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import User from '../models/User.js';
+import Friendship from '../models/Friendship.js';
+import Party from '../models/Party.js';
 import { sendVerificationEmail, sendPasswordResetEmail } from '../utils/email.js';
+import { removeUserFromQueue } from './queueController.js';
 
 const signToken = (userId) =>
   jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -99,7 +102,7 @@ export const loginUser = async (req, res) => {
 
 export const getUsers = async (req, res) => {
   try {
-    const users = await User.find().select('-password');
+    const users = await User.find({ isDeleted: { $ne: true } }).select('-password');
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -178,7 +181,25 @@ export const deleteAccount = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    await User.findByIdAndDelete(userId);
+    removeUserFromQueue(userId);
+
+    await Friendship.deleteMany({ $or: [{ requester: userId }, { recipient: userId }] });
+    await Party.deleteMany({ $or: [{ leader: userId }, { members: userId }] });
+
+    const unusablePassword = await bcrypt.hash(crypto.randomBytes(32).toString('hex'), 10);
+
+    user.username = `deleted_user_${user._id.toString().slice(-8)}`;
+    user.password = unusablePassword;
+    user.email = undefined;
+    user.emailVerified = false;
+    user.emailVerifyTokenHash = null;
+    user.emailVerifyExpires = null;
+    user.passwordResetTokenHash = null;
+    user.passwordResetExpires = null;
+    user.status = 'idle';
+    user.isApproved = false;
+    user.isDeleted = true;
+    await user.save();
 
     res.status(200).json({ status: 'deleted' });
   } catch (error) {

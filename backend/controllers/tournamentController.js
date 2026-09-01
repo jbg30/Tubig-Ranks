@@ -575,7 +575,7 @@ export const reportTournamentMatch = async (req, res) => {
 
 export const getTournamentLeaderboard = async (req, res) => {
   try {
-    const users = await User.find({ tournamentPoints: { $gt: 0 } })
+    const users = await User.find({ tournamentPoints: { $gt: 0 }, isDeleted: { $ne: true } })
       .select('username mmr isPlaced tournamentPoints')
       .sort({ tournamentPoints: -1 })
       .limit(50);

@@ -114,6 +114,10 @@ export const joinQueue = async (req, res) => {
   }
 };
 
+export const removeUserFromQueue = (userId) => {
+  queue = queue.filter((e) => e.userId !== userId);
+};
+
 export const leaveQueue = async (req, res) => {
   try {
     const { userId } = req.body;

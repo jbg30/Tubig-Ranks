@@ -344,7 +344,7 @@ export default function Lobby() {
           return (
             <div key={u._id}>
               {rankNum === 4 && <div className="lb-divider" />}
-              <div className="lb-row" onContextMenu={(e) => handleRightClick(e, u._id)}>
+              <div className="lb-row" onClick={() => navigate(`/profile/${u._id}`)} style={{ cursor: 'pointer' }}>
                 <span className={`lb-rank ${rankClass}`}>{rankNum}</span>
                 {getRankClass(u.mmr) === 'diamond'
                   ? <img src={diamondIcon} alt="Diamond" style={{ width: 42, height: 42, objectFit: 'contain', flexShrink: 0, filter: 'drop-shadow(0 0 6px #5dd5e8) drop-shadow(0 0 12px #5dd5e8aa)' }} />
